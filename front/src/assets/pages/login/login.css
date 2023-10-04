@@ -1,0 +1,12 @@
+.login {
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+}
+
+main {
+  align-items: center;
+  background-color: #12002b;
+  display: flex;
+  flex: 2;
+}
