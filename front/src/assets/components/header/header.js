@@ -18,7 +18,13 @@ function Header() {
           <i className="fa-regular fa-circle-user"></i>
           <span>Sign In</span>
         </Link>
-        <Link to={"/login"} className="main-nav-item">
+        <Link
+          onClick={() => {
+            localStorage.clear();
+          }}
+          to={"/"}
+          className="main-nav-item"
+        >
           <i className="fa-solid fa-right-from-bracket"></i>
           <span>Sign Out</span>
         </Link>

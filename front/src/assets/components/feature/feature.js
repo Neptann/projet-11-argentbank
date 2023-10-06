@@ -22,7 +22,7 @@ function Feature() {
   useEffect(() => {
     getData();
   }, []);
-  console.log(data);
+  // console.log(data);
   return (
     <div className="features">
       {data.map((item) => (
