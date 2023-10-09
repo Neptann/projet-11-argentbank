@@ -5,3 +5,21 @@
   font-weight: bold;
   padding: 10px;
 }
+
+.edit-button-high {
+  border-color: #00bc77;
+  background-color: #00bc77;
+  color: #fff;
+  font-size: 18px;
+  font-weight: bold;
+  padding: 10px;
+  width: auto;
+}
+
+@media (max-width: 720px) {
+
+  .edit-button-high {
+    margin-top: 15px;
+    width: 100%;
+  }
+}

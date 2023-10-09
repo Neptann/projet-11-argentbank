@@ -1,6 +1,7 @@
 import "../user/user.css";
 import Header from "../../components/header/header";
 import Button from "../../components/button/button";
+import Transaction from "../../components/transaction/transaction";
 import Footer from "../../components/footer/footer";
 
 function User() {
@@ -14,7 +15,8 @@ function User() {
             <br />
             "user"
           </h1>
-          <Button />
+          <Button title={"Edit Name"} />
+          <Transaction />
         </main>
       </div>
       <Footer />
