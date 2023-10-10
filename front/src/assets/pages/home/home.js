@@ -9,7 +9,7 @@ function Home() {
 
   if (storedToken) {
     // Utilisez le token comme vous le souhaitez
-    console.log("Token récupéré depuis le localStorage :", storedToken);
+    console.log("Token présent :", storedToken);
     // Vous pouvez l'envoyer avec vos requêtes API, par exemple.
   } else {
     // Gérez le cas où le token n'est pas présent dans le localStorage.

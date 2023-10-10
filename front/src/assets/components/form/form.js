@@ -31,18 +31,18 @@ function Form() {
 
           localStorage.setItem("token", JSON.stringify(authToken));
           console.log("Token stocké :", authToken);
-          localStorage.setItem("email", JSON.stringify(userEmail));
-          console.log(userEmail);
           console.log(data);
 
+          window.location.href = "/user";
           const storedToken = JSON.parse(localStorage.getItem("token"));
           if (storedToken) {
             console.log("Token stocké dans le localStorage :", storedToken);
           } else {
             console.log("Aucun token n'est stocké dans le localStorage");
           }
-        } else {
-          console.error("Erreur lors de la connexion :", data.message);
+        } else if (data.status == 401 || data.status == 404) {
+          // console.error("Erreur lors de la connexion :", data.message);
+          console.error("Mauvais identifiants !");
         }
       })
       .catch((err) => console.error(err));
@@ -74,7 +74,7 @@ function Form() {
           <label htmlFor="remember-me">Remember me</label>
         </div>
         {/* <!-- PLACEHOLDER DUE TO STATIC SITE --> */}
-        <Link to={"/user"} onClick={postLogin} className="sign-in-button">
+        <Link onClick={postLogin} className="sign-in-button">
           Sign In
         </Link>
         {/* <!-- SHOULD BE THE BUTTON BELOW --> */}
