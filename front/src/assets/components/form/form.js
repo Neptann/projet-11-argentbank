@@ -33,10 +33,33 @@ function Form() {
           console.log("Token stocké :", authToken);
           console.log(data);
 
-          window.location.href = "/user";
+          // window.location.href = "/user";
           const storedToken = JSON.parse(localStorage.getItem("token"));
           if (storedToken) {
             console.log("Token stocké dans le localStorage :", storedToken);
+            const optionsProfile = {
+              method: "POST",
+              headers: {
+                Authorization: `Bearer ${storedToken}`,
+                "Content-Type": "application/json",
+              },
+              body: JSON.stringify({
+                token: token,
+              }),
+            };
+            fetch("http://127.0.0.1:3001/api/v1/user/profile", optionsProfile)
+              .then((response) => response.json())
+              .then((data) => {
+                console.log(data);
+                if (data.status === 200 && data.body) {
+                  const authUser = data.body;
+
+                  setToken(authUser);
+
+                  localStorage.setItem("body", JSON.stringify(authUser));
+                  console.log("Données stockées :", authUser);
+                }
+              });
           } else {
             console.log("Aucun token n'est stocké dans le localStorage");
           }
