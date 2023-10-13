@@ -3,6 +3,7 @@ import logo from "../../images/argentBankLogo.png";
 import { Link } from "react-router-dom";
 
 function Header() {
+  const authUser = JSON.parse(localStorage.getItem("body"));
   return (
     <nav className="main-nav">
       <Link className="main-nav-logo" to={"/"}>
@@ -14,10 +15,18 @@ function Header() {
         <h1 className="sr-only">Argent Bank</h1>
       </Link>
       <div className="connection">
-        <Link to={"/login"} className="main-nav-item">
-          <i className="fa-regular fa-circle-user"></i>
-          <span>Sign In</span>
-        </Link>
+        {authUser ? (
+          <Link to={"/user"} className="main-nav-item">
+            <i className="fa-regular fa-circle-user"></i>
+            <span>{authUser.firstName}</span>
+          </Link>
+        ) : (
+          <Link to={"/login"} className="main-nav-item">
+            <i className="fa-regular fa-circle-user"></i>
+            <span>Sign In</span>
+          </Link>
+        )}
+
         <Link
           onClick={() => {
             localStorage.clear();
