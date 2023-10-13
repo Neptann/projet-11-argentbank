@@ -2,6 +2,7 @@
   border-color: #00bc77;
   background-color: #00bc77;
   color: #fff;
+  cursor: pointer;
   font-weight: bold;
   padding: 10px;
 }
@@ -10,6 +11,7 @@
   border-color: #00bc77;
   background-color: #00bc77;
   color: #fff;
+  cursor: pointer;
   font-size: 18px;
   font-weight: bold;
   padding: 10px;
