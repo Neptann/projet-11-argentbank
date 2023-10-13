@@ -30,10 +30,9 @@ function Form() {
           setToken(authToken); // Le token en local.
 
           localStorage.setItem("token", JSON.stringify(authToken));
-          console.log("Token stocké :", authToken);
+          // console.log("Token stocké :", authToken);
           console.log(data);
 
-          // window.location.href = "/user";
           const storedToken = JSON.parse(localStorage.getItem("token"));
           if (storedToken) {
             console.log("Token stocké dans le localStorage :", storedToken);
@@ -58,12 +57,13 @@ function Form() {
 
                   localStorage.setItem("body", JSON.stringify(authUser));
                   console.log("Données stockées :", authUser);
+                  window.location.href = "/user";
                 }
               });
           } else {
             console.log("Aucun token n'est stocké dans le localStorage");
           }
-        } else if (data.status == 401 || data.status == 404) {
+        } else if (data.status === 401 || data.status === 404) {
           // console.error("Erreur lors de la connexion :", data.message);
           console.error("Mauvais identifiants !");
         }
