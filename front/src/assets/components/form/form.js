@@ -6,6 +6,7 @@ function Form() {
   const [userEmail, setUserEmail] = useState("");
   const [password, setPassword] = useState("");
   const [token, setToken] = useState(null);
+  const [error, setError] = useState("");
 
   const options = {
     method: "POST",
@@ -63,9 +64,15 @@ function Form() {
           } else {
             console.log("Aucun token n'est stocké dans le localStorage");
           }
-        } else if (data.status === 401 || data.status === 404) {
+        } else if (
+          data.status === 400 ||
+          data.status === 401 ||
+          data.status === 404
+        ) {
           // console.error("Erreur lors de la connexion :", data.message);
-          console.error("Mauvais identifiants !");
+          setError(<span>Mauvais identifiants !</span>);
+          setTimeout(() => setError(""), 5000);
+          return;
         }
       })
       .catch((err) => console.error(err));
@@ -103,6 +110,7 @@ function Form() {
         {/* <!-- SHOULD BE THE BUTTON BELOW --> */}
         {/* <!-- <button className="sign-in-button">Sign In</button> --> */}
         {/* <!--  --> */}
+        {error ? <p className="errorMessage">{error}</p> : null}
       </form>
     </section>
   );
