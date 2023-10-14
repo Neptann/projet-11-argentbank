@@ -1,32 +1,72 @@
 import { Link } from "react-router-dom";
 import "../form/form.css";
 import { useState, useEffect } from "react";
-import loading from "../../icons/loading.mp4";
+import { useSelector, useDispatch } from "react-redux";
+import { updateTokenBy } from "../../../features/token/tokenSlice";
+import { updateUser } from "../../../features/user/userSlice";
+import { useNavigate } from "react-router-dom";
+import { updateEmail } from "../../../features/saveEmail/saveEmailSlice";
 
 function Form() {
+  const navigate = useNavigate();
+  const dispatch = useDispatch();
+
   const [userEmail, setUserEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [token, setToken] = useState(null);
+  // const [token, setToken] = useState(null);
   const [error, setError] = useState("");
   const [rememberMe, setRememberMe] = useState(false);
   const [loggedIn, setLoggedIn] = useState(false);
 
+  const token = useSelector((state) => state.token.value);
+  const savedEmail = useSelector((state) => state.mail.value);
+
+  useEffect(() => {
+    console.log(token);
+    if (token === null) {
+      return;
+    }
+    console.log("Token stocké dans le localStorage :", token);
+    const optionsProfile = {
+      method: "POST",
+      headers: {
+        Authorization: `Bearer ${token}`,
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        token: token,
+      }),
+    };
+    fetch("http://127.0.0.1:3001/api/v1/user/profile", optionsProfile)
+      .then((response) => response.json())
+      .then((data) => {
+        console.log(data);
+        if (data.status === 200 && data.body) {
+          dispatch(updateUser(data.body));
+
+          // localStorage.setItem("body", JSON.stringify(data.body));
+          // console.log("Données stockées :", data.body);
+
+          navigate("/user");
+        }
+      });
+  }, [token, dispatch, navigate]);
+
   // Récupérer l'e-mail du localStorage lors du chargement initial de la composante
   useEffect(() => {
-    const storedEmail = localStorage.getItem("userEmail");
-    if (storedEmail) {
-      setUserEmail(storedEmail);
+    if (savedEmail) {
+      setUserEmail(savedEmail);
       setRememberMe(true);
     }
-  }, []);
+  }, [savedEmail]);
 
   // Gérer le changement d'état de la case "Remember me"
   const handleRememberMeChange = (e) => {
     setRememberMe(e.target.checked);
     if (e.target.checked) {
-      localStorage.setItem("userEmail", userEmail);
+      dispatch(updateEmail(userEmail));
     } else {
-      localStorage.removeItem("userEmail");
+      dispatch(updateEmail(null));
     }
   };
 
@@ -35,7 +75,6 @@ function Form() {
     headers: {
       Authorization: `Bearer ${token}`,
       "Content-Type": "application/json",
-      // "User-Agent": "insomnia/8.1.0",
     },
     body: JSON.stringify({
       email: userEmail,
@@ -48,48 +87,11 @@ function Form() {
       .then((response) => response.json())
       .then((data) => {
         if (data.status === 200 && data.body && data.body.token) {
-          setLoggedIn(true);
           const authToken = data.body.token;
 
-          setToken(authToken); // Le token en local.
+          dispatch(updateTokenBy(authToken));
 
-          localStorage.setItem("token", JSON.stringify(authToken));
-          // console.log("Token stocké :", authToken);
-          // console.log(data);
-
-          const storedToken = JSON.parse(localStorage.getItem("token"));
-          if (storedToken) {
-            console.log("Token stocké dans le localStorage :", storedToken);
-            const optionsProfile = {
-              method: "POST",
-              headers: {
-                Authorization: `Bearer ${storedToken}`,
-                "Content-Type": "application/json",
-              },
-              body: JSON.stringify({
-                token: token,
-              }),
-            };
-            fetch("http://127.0.0.1:3001/api/v1/user/profile", optionsProfile)
-              .then((response) => response.json())
-              .then((data) => {
-                console.log(data);
-                if (data.status === 200 && data.body) {
-                  const authUser = data.body;
-
-                  setToken(authUser);
-
-                  localStorage.setItem("body", JSON.stringify(authUser));
-                  console.log("Données stockées :", authUser);
-
-                  setTimeout(() => {
-                    window.location.href = "/user";
-                  }, 5000);
-                }
-              });
-          } else {
-            console.log("Aucun token n'est stocké dans le localStorage");
-          }
+          setLoggedIn(true);
         } else if (
           data.status === 400 ||
           data.status === 401 ||

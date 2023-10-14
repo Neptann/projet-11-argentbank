@@ -5,18 +5,24 @@ import Transaction from "../../components/transaction/transaction";
 import Footer from "../../components/footer/footer";
 import Error from "../error/error";
 import { useState, useEffect } from "react";
+import { useSelector, useDispatch } from "react-redux";
+import { updateUser } from "../../../features/user/userSlice";
 
 function User() {
-  const authToken = JSON.parse(localStorage.getItem("token"));
   // const authUser = JSON.parse(localStorage.getItem("body"));
-  const [authUser, setAuthUser] = useState(
-    JSON.parse(localStorage.getItem("body"))
-  );
+  const token = useSelector((state) => state.token.value);
+  const authToken = token;
+
+  // const [authUser, setAuthUser] = useState(
+  //   JSON.parse(localStorage.getItem("body"))
+  // );
+  const user = useSelector((state) => state.user.value);
+  const dispatch = useDispatch();
   const [newUsername, setNewUsername] = useState("");
   const [errorMessage, setErrorMessage] = useState("");
   const [isFormVisible, setIsFormVisible] = useState(false);
 
-  function updateUser() {
+  function callUpdateUser() {
     if (
       newUsername.length < 3 ||
       /[^A-Za-z]/.test(newUsername) ||
@@ -49,8 +55,9 @@ function User() {
       .then((response) => response.json())
       .then((data) => {
         if (data.status === 200) {
-          setAuthUser(data.body);
-          localStorage.setItem("body", JSON.stringify(data.body));
+          // setAuthUser(data.body);
+          dispatch(updateUser(data.body));
+          // localStorage.setItem("body", JSON.stringify(data.body));
         }
       });
   }
@@ -75,7 +82,7 @@ function User() {
 
   return (
     <>
-      {authToken ? (
+      {token ? (
         <div>
           <Header />
           <div className="container">
@@ -83,7 +90,7 @@ function User() {
               <h1 className="welcome">
                 Welcome back
                 <br />
-                {authUser.userName}
+                {user?.userName}
               </h1>
               <Button title={"Edit Username"} onClick={handleEditNameClick} />
               {isFormVisible && (
@@ -101,7 +108,7 @@ function User() {
                       className="buttonOk"
                       onClick={(e) => {
                         e.preventDefault();
-                        updateUser();
+                        callUpdateUser();
                       }}
                     >
                       Ok

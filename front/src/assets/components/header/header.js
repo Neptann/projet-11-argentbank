@@ -1,15 +1,20 @@
 import "../header/header.css";
 import logo from "../../images/argentBankLogo.png";
 import { Link } from "react-router-dom";
+import { updateUser } from "../../../features/user/userSlice";
+import { useDispatch, useSelector } from "react-redux";
+import { updateTokenBy } from "../../../features/token/tokenSlice";
 
 function Header() {
-  const authUser = JSON.parse(localStorage.getItem("body"));
-  const authToken = JSON.parse(localStorage.getItem("token"));
+  // const authUser = JSON.parse(localStorage.getItem("body"));
+  // const authToken = JSON.parse(localStorage.getItem("token"));
+  const user = useSelector((state) => state.user.value);
+  const token = useSelector((state) => state.token.value);
+  const dispatch = useDispatch();
+
   const handleSignOut = () => {
-    const keysToDelete = ["body", "token"];
-    keysToDelete.forEach((key) => {
-      localStorage.removeItem(key);
-    });
+    dispatch(updateTokenBy(null));
+    dispatch(updateUser(null));
   };
   return (
     <nav className="main-nav">
@@ -22,10 +27,10 @@ function Header() {
         <h1 className="sr-only">Argent Bank</h1>
       </Link>
       <div className="connection">
-        {authUser ? (
+        {user ? (
           <Link to={"/user"} className="main-nav-item">
             <i className="fa-regular fa-circle-user"></i>
-            <span>{authUser.firstName}</span>
+            <span>{user.firstName}</span>
           </Link>
         ) : (
           <Link to={"/login"} className="main-nav-item">
@@ -33,7 +38,7 @@ function Header() {
             <span>Sign In</span>
           </Link>
         )}
-        {authToken ? (
+        {token ? (
           <Link onClick={handleSignOut} to={"/"} className="main-nav-item">
             <i className="fa-solid fa-right-from-bracket"></i>
             <span>Sign Out</span>
