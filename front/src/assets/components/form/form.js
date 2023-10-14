@@ -1,12 +1,34 @@
 import { Link } from "react-router-dom";
 import "../form/form.css";
-import { useState } from "react";
+import { useState, useEffect } from "react";
+import loading from "../../icons/loading.mp4";
 
 function Form() {
   const [userEmail, setUserEmail] = useState("");
   const [password, setPassword] = useState("");
   const [token, setToken] = useState(null);
   const [error, setError] = useState("");
+  const [rememberMe, setRememberMe] = useState(false);
+  const [loggedIn, setLoggedIn] = useState(false);
+
+  // Récupérer l'e-mail du localStorage lors du chargement initial de la composante
+  useEffect(() => {
+    const storedEmail = localStorage.getItem("userEmail");
+    if (storedEmail) {
+      setUserEmail(storedEmail);
+      setRememberMe(true);
+    }
+  }, []);
+
+  // Gérer le changement d'état de la case "Remember me"
+  const handleRememberMeChange = (e) => {
+    setRememberMe(e.target.checked);
+    if (e.target.checked) {
+      localStorage.setItem("userEmail", userEmail);
+    } else {
+      localStorage.removeItem("userEmail");
+    }
+  };
 
   const options = {
     method: "POST",
@@ -26,13 +48,14 @@ function Form() {
       .then((response) => response.json())
       .then((data) => {
         if (data.status === 200 && data.body && data.body.token) {
+          setLoggedIn(true);
           const authToken = data.body.token;
 
           setToken(authToken); // Le token en local.
 
           localStorage.setItem("token", JSON.stringify(authToken));
           // console.log("Token stocké :", authToken);
-          console.log(data);
+          // console.log(data);
 
           const storedToken = JSON.parse(localStorage.getItem("token"));
           if (storedToken) {
@@ -58,7 +81,10 @@ function Form() {
 
                   localStorage.setItem("body", JSON.stringify(authUser));
                   console.log("Données stockées :", authUser);
-                  window.location.href = "/user";
+
+                  setTimeout(() => {
+                    window.location.href = "/user";
+                  }, 5000);
                 }
               });
           } else {
@@ -88,6 +114,7 @@ function Form() {
           <input
             type="text"
             id="email"
+            value={userEmail}
             onChange={(e) => setUserEmail(e.target.value)}
           />
         </div>
@@ -100,13 +127,28 @@ function Form() {
           />
         </div>
         <div className="input-remember">
-          <input type="checkbox" id="remember-me" />
+          <input
+            type="checkbox"
+            id="remember-me"
+            checked={rememberMe}
+            onChange={handleRememberMeChange}
+          />
           <label htmlFor="remember-me">Remember me</label>
         </div>
         {/* <!-- PLACEHOLDER DUE TO STATIC SITE --> */}
-        <Link onClick={postLogin} className="sign-in-button">
-          Sign In
-        </Link>
+        {loggedIn ? ( // Si l'utilisateur est connecté
+          // <video className="loading" src={loading} autoPlay loop muted />
+          <div className="lds-ring">
+            <div></div>
+            <div></div>
+            <div></div>
+            <div></div>
+          </div>
+        ) : (
+          <Link onClick={postLogin} className="sign-in-button">
+            Sign In
+          </Link>
+        )}
         {/* <!-- SHOULD BE THE BUTTON BELOW --> */}
         {/* <!-- <button className="sign-in-button">Sign In</button> --> */}
         {/* <!--  --> */}

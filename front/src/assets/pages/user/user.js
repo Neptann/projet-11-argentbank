@@ -8,7 +8,10 @@ import { useState, useEffect } from "react";
 
 function User() {
   const authToken = JSON.parse(localStorage.getItem("token"));
-  const authUser = JSON.parse(localStorage.getItem("body"));
+  // const authUser = JSON.parse(localStorage.getItem("body"));
+  const [authUser, setAuthUser] = useState(
+    JSON.parse(localStorage.getItem("body"))
+  );
   const [newUsername, setNewUsername] = useState("");
   const [errorMessage, setErrorMessage] = useState("");
   const [isFormVisible, setIsFormVisible] = useState(false);
@@ -46,6 +49,7 @@ function User() {
       .then((response) => response.json())
       .then((data) => {
         if (data.status === 200) {
+          setAuthUser(data.body);
           localStorage.setItem("body", JSON.stringify(data.body));
         }
       });
@@ -81,7 +85,7 @@ function User() {
                 <br />
                 {authUser.userName}
               </h1>
-              <Button title={"Edit Name"} onClick={handleEditNameClick} />
+              <Button title={"Edit Username"} onClick={handleEditNameClick} />
               {isFormVisible && (
                 <div className="formContainer">
                   <form className="editName">
