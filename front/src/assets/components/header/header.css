@@ -47,3 +47,9 @@
   max-width: 100%;
   width: 200px;
 }
+
+@media (max-width: 445px) {
+  .main-nav {
+    flex-direction: column;
+  }
+}
