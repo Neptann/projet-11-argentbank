@@ -6,8 +6,6 @@ import { useDispatch, useSelector } from "react-redux";
 import { updateTokenBy } from "../../../features/token/tokenSlice";
 
 function Header() {
-  // const authUser = JSON.parse(localStorage.getItem("body"));
-  // const authToken = JSON.parse(localStorage.getItem("token"));
   const user = useSelector((state) => state.user.value);
   const token = useSelector((state) => state.token.value);
   const dispatch = useDispatch();
@@ -30,7 +28,7 @@ function Header() {
         {user ? (
           <Link to={"/user"} className="main-nav-item">
             <i className="fa-regular fa-circle-user"></i>
-            <span>{user.firstName}</span>
+            <span>{user.userName}</span>
           </Link>
         ) : (
           <Link to={"/login"} className="main-nav-item">

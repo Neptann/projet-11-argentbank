@@ -13,7 +13,6 @@ function Form() {
 
   const [userEmail, setUserEmail] = useState("");
   const [password, setPassword] = useState("");
-  // const [token, setToken] = useState(null);
   const [error, setError] = useState("");
   const [rememberMe, setRememberMe] = useState(false);
   const [loggedIn, setLoggedIn] = useState(false);
@@ -26,7 +25,7 @@ function Form() {
     if (token === null) {
       return;
     }
-    console.log("Token stocké dans le localStorage :", token);
+    // console.log("Token stocké dans le localStorage :", token);
     const optionsProfile = {
       method: "POST",
       headers: {
@@ -44,15 +43,12 @@ function Form() {
         if (data.status === 200 && data.body) {
           dispatch(updateUser(data.body));
 
-          // localStorage.setItem("body", JSON.stringify(data.body));
-          // console.log("Données stockées :", data.body);
-
           navigate("/user");
         }
       });
   }, [token, dispatch, navigate]);
 
-  // Récupérer l'e-mail du localStorage lors du chargement initial de la composante
+  // Récupère e-mail du localStorage
   useEffect(() => {
     if (savedEmail) {
       setUserEmail(savedEmail);
@@ -60,7 +56,7 @@ function Form() {
     }
   }, [savedEmail]);
 
-  // Gérer le changement d'état de la case "Remember me"
+  // Etat remember me
   const handleRememberMeChange = (e) => {
     setRememberMe(e.target.checked);
     if (e.target.checked) {
@@ -97,7 +93,6 @@ function Form() {
           data.status === 401 ||
           data.status === 404
         ) {
-          // console.error("Erreur lors de la connexion :", data.message);
           setError(<span>Mauvais identifiants !</span>);
           setTimeout(() => setError(""), 5000);
           return;
@@ -137,9 +132,7 @@ function Form() {
           />
           <label htmlFor="remember-me">Remember me</label>
         </div>
-        {/* <!-- PLACEHOLDER DUE TO STATIC SITE --> */}
-        {loggedIn ? ( // Si l'utilisateur est connecté
-          // <video className="loading" src={loading} autoPlay loop muted />
+        {loggedIn ? ( // Si connecté
           <div className="lds-ring">
             <div></div>
             <div></div>
@@ -151,9 +144,6 @@ function Form() {
             Sign In
           </Link>
         )}
-        {/* <!-- SHOULD BE THE BUTTON BELOW --> */}
-        {/* <!-- <button className="sign-in-button">Sign In</button> --> */}
-        {/* <!--  --> */}
         {error ? <p className="errorMessage">{error}</p> : null}
       </form>
     </section>

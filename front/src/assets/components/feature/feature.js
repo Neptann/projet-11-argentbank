@@ -11,18 +11,15 @@ function Feature() {
       },
     })
       .then(function (response) {
-        // console.log(response);
         return response.json();
       })
       .then(function (myJson) {
-        // console.log(myJson);
         setData(myJson);
       });
   };
   useEffect(() => {
     getData();
   }, []);
-  // console.log(data);
   return (
     <div className="features">
       {data.map((item) => (
