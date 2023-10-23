@@ -96,23 +96,52 @@ function User() {
               {isFormVisible && (
                 <div className="formContainer">
                   <form className="editName">
-                    <input
-                      type="text"
-                      id="username"
-                      placeholder="new username"
-                      onChange={(e) => {
-                        setNewUsername(e.target.value);
-                      }}
-                    ></input>
-                    <button
-                      className="buttonOk"
-                      onClick={(e) => {
-                        e.preventDefault();
-                        callUpdateUser();
-                      }}
-                    >
-                      Ok
-                    </button>
+                    <div className="input-form">
+                      <label>User name :</label>
+                      <input
+                        type="text"
+                        id="username"
+                        onChange={(e) => {
+                          setNewUsername(e.target.value);
+                        }}
+                      ></input>
+                    </div>
+                    <div className="input-form">
+                      <label>First name :</label>
+                      <input
+                        type="text"
+                        disabled
+                        placeholder={user.firstName}
+                        className="disable"
+                      ></input>
+                    </div>
+                    <div className="input-form">
+                      <label>Last name :</label>
+                      <input
+                        type="text"
+                        disabled
+                        placeholder={user.lastName}
+                        className="disable"
+                      ></input>
+                    </div>
+                    <div className="buttons">
+                      <button
+                        className="button"
+                        onClick={(e) => {
+                          e.preventDefault();
+                          callUpdateUser();
+                        }}
+                      >
+                        Save
+                      </button>
+                      <button
+                        type="button"
+                        onClick={handleEditNameClick}
+                        className="button"
+                      >
+                        Cancel
+                      </button>
+                    </div>
                   </form>
                   {errorMessage && (
                     <p className="errorMessage">{errorMessage}</p>
