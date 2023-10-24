@@ -43,7 +43,6 @@ function User() {
       headers: {
         Authorization: `Bearer ${authToken}`,
         "Content-Type": "application/json",
-        // "User-Agent": "insomnia/8.1.0",
       },
       body: JSON.stringify({
         userName: newUsername,
