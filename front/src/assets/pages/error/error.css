@@ -1,0 +1,16 @@
+.error {
+    background-color: #12002b;
+    display: flex;
+    flex-direction: column;
+    height: 75vh;
+    justify-content: center;
+}
+
+.error h1 {
+    color: white;
+    font-size: 50px;
+}
+
+.home-link {
+    color: white;
+}

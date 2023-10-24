@@ -9,23 +9,24 @@ import { updateEmail } from "../../../features/saveEmail/saveEmailSlice";
 
 function Form() {
   const navigate = useNavigate();
-  const dispatch = useDispatch();
+  const dispatch = useDispatch(); // hook pour manipuler store.
 
+  // initialise les états
   const [userEmail, setUserEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
-  const [rememberMe, setRememberMe] = useState(false);
-  const [loggedIn, setLoggedIn] = useState(false);
+  const [rememberMe, setRememberMe] = useState(false); // stock booléen si email mémorisé.
+  const [loggedIn, setLoggedIn] = useState(false); // stock booléen si utilisateur connecté.
 
+  // extrait données du Redux store.
   const token = useSelector((state) => state.token.value);
   const savedEmail = useSelector((state) => state.mail.value);
 
   useEffect(() => {
     console.log(token);
     if (token === null) {
-      return;
+      return; // ne fait rien.
     }
-    // console.log("Token stocké dans le localStorage :", token);
     const optionsProfile = {
       method: "POST",
       headers: {
@@ -36,7 +37,7 @@ function Form() {
         token: token,
       }),
     };
-    fetch("http://127.0.0.1:3001/api/v1/user/profile", optionsProfile)
+    fetch("http://127.0.0.1:3001/api/v1/user/profile", optionsProfile) // effectue une requête.
       .then((response) => response.json())
       .then((data) => {
         console.log(data);
@@ -83,9 +84,9 @@ function Form() {
       .then((response) => response.json())
       .then((data) => {
         if (data.status === 200 && data.body && data.body.token) {
-          const authToken = data.body.token;
+          const authToken = data.body.token; // extrait le token des données renvoyées.
 
-          dispatch(updateTokenBy(authToken));
+          dispatch(updateTokenBy(authToken)); // stocke le token dans redux.
 
           setLoggedIn(true);
         } else if (

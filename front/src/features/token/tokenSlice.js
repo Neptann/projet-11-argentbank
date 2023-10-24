@@ -1,5 +1,6 @@
 import { createSlice } from "@reduxjs/toolkit";
 
+// valeur par default
 const initialState = {
   value: null,
 };
@@ -7,6 +8,7 @@ const initialState = {
 export const tokenSlice = createSlice({
   name: "token",
   initialState,
+  // actions
   reducers: {
     updateTokenBy: (state, action) => {
       state.value = action.payload;

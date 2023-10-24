@@ -23,11 +23,10 @@ function User() {
   const [isFormVisible, setIsFormVisible] = useState(false);
 
   function callUpdateUser() {
-    if (
-      newUsername.length < 3 ||
-      /[^A-Za-z]/.test(newUsername) ||
-      /\d/.test(newUsername)
-    ) {
+    const isUsernameInvalid = newUsername.length < 3;
+    const asSpecialCharacter = /[^A-Za-z]/.test(newUsername);
+    const asNumber = /\d/.test(newUsername);
+    if (isUsernameInvalid || asSpecialCharacter || asNumber) {
       setErrorMessage(
         <span>
           L'utilisateur doit avoir un nom d'au moins 3 lettres, <br /> sans
